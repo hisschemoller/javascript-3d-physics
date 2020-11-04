@@ -11,7 +11,7 @@ import {
   SphereBufferGeometry,
   Vector3,
   WebGLRenderer,
-} from './three/build/three.module.js';
+} from '../../lib/three/build/three.module.js';
 
 let physicsWorld, rigidBodies = [], tmpTrans;
 let camera, clock, renderer, scene;
