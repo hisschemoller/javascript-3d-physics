@@ -1,13 +1,18 @@
 import { dispatch, getActions, STATE_CHANGE, } from '../store/store.js';
+import { step, } from './physics.js';
+import { populateWorld, } from './population.js';
 import addWindowResizeCallback from '../view/windowresize.js';
 import { 
   AmbientLight,
   DirectionalLight,
+  Clock,
+  Color,
+  HemisphereLight,
   MathUtils,
+  PCFShadowMap,
   PerspectiveCamera,
   Raycaster,
   Scene,
-  Vector2,
   Vector3,
   WebGLRenderer 
 } from '../lib/three/build/three.module.js';
@@ -15,6 +20,7 @@ import { OrbitControls } from '../lib/three/examples/jsm/controls/OrbitControls.
 
 let camera,
   canvasRect,
+  clock,
   intersection,
   orbitControls,
   raycaster,
@@ -34,6 +40,8 @@ function addEventListeners() {
  * Update the physics world and render the results in 3D.
  */
 function draw() {
+  const deltaTime = clock.getDelta();
+  step(deltaTime);
   renderer.render(scene, camera);
   requestAnimationFrame(draw);
 }
@@ -87,10 +95,9 @@ function onWindowResize(isFirstRun = false) {
 /**
  * General setup of the module.
  */
-export function setup() {
-  rootEl = document.querySelector('#canvas-container');
-
+export function setup(physicsWorld) {
   setupWebGLWorld();
+  populateWorld(scene, physicsWorld);
   addEventListeners();
   onWindowResize(true);
   draw();
@@ -101,31 +108,58 @@ export function setup() {
  */
 function setupWebGLWorld() {
   renderer = new WebGLRenderer({ antialias: true });
-  renderer.setClearColor(0xffffff);
-  
+  renderer.setClearColor(0xbfd1e5);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = PCFShadowMap; // PCFSoftShadowMap
+
+  rootEl = document.querySelector('#canvas-container');
   rootEl.appendChild(renderer.domElement);
+
+  clock = new Clock();
 
   raycaster = new Raycaster();
 
   intersection = new Vector3();
 
   scene = new Scene();
+  scene.background = new Color( 0xbfd1e5 );
 
   camera = new PerspectiveCamera(45, 1, 1, 500);
   camera.name = 'camera';
+  camera.lookAt(new Vector3(0, 0, 0));
   scene.add(camera);
 
-  const ambientLight = new AmbientLight(0xffffff);
-  scene.add(ambientLight);
+  // const ambientLight = new AmbientLight(0xffffff);
+  // scene.add(ambientLight);
 
-  const directionalLight = new DirectionalLight(0xffffff, 0.5);
-  directionalLight.position.set(-0.5, 0.5, -1.5).normalize();
+  const hemiLight = new HemisphereLight( 0xffffff, 0xffffff, 0.1 );
+  hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
+  hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
+  hemiLight.position.set( 0, 50, 0 );
+  scene.add( hemiLight );
+
+  const SHADOW_SIZE = 50;
+  const SHADOW_FAR = 13500;
+  const directionalLight = new DirectionalLight(0xffffff, 1);
+  // directionalLight.position.set(-0.5, 0.5, -1.5).normalize();
+  directionalLight.position.set(-1, 1.75, 1);
+  directionalLight.position.multiplyScalar(100);
+  directionalLight.color.setHSL(0.1, 1, 0.95);
+  directionalLight.castShadow = true;
+  directionalLight.shadow.mapSize.width = 2048;
+  directionalLight.shadow.mapSize.height = 2048;
+  directionalLight.shadow.camera.left = -SHADOW_SIZE;
+  directionalLight.shadow.camera.right = SHADOW_SIZE;
+  directionalLight.shadow.camera.top = SHADOW_SIZE;
+  directionalLight.shadow.camera.bottom = -SHADOW_SIZE;
+  directionalLight.shadow.camera.far = SHADOW_FAR;
   scene.add(directionalLight);
 
   orbitControls = new OrbitControls(camera, renderer.domElement);
   orbitControls.update();
   orbitControls.saveState();
-  orbitControls.enabled = false;
+  orbitControls.enabled = true;
 
   // const control = new TransformControls(camera, renderer.domElement);
 }
