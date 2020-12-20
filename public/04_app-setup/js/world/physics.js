@@ -52,9 +52,9 @@ export function step(deltaTime) {
 
   getPopulation().forEach(mesh => {
     const body = mesh.userData.physicsBody;
-    const motionstate = body.getMotionState();
-    if (motionstate) {
-      motionstate.getWorldTransform(tmpTrans);
+    const motionState = body.getMotionState();
+    if (motionState) {
+      motionState.getWorldTransform(tmpTrans);
       const p = tmpTrans.getOrigin();
       const q = tmpTrans.getRotation();
       mesh.position.set( p.x(), p.y(), p.z() );

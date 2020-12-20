@@ -35,14 +35,15 @@ function createBall(scene, physicsWorld) {
   transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
   const motionState = new Ammo.btDefaultMotionState( transform );
 
-  const colShape = new Ammo.btSphereShape( radius );
+  const colShape = new Ammo.btSphereShape(radius);
   colShape.setMargin( 0.05 );
 
-  const localInertia = new Ammo.btVector3( 0, 0, 0 );
-  colShape.calculateLocalInertia( mass, localInertia );
+  const localInertia = new Ammo.btVector3(0, 0, 0);
+  colShape.calculateLocalInertia(mass, localInertia);
 
-  const rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-  const body = new Ammo.btRigidBody( rbInfo );
+  const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia);
+  const body = new Ammo.btRigidBody(rbInfo);
+  body.setRestitution(0.8);
 
   physicsWorld.addRigidBody( body, colGroupRedBall, colGroupPlane | colGroupGreenBall );
   
@@ -83,7 +84,8 @@ function createBlock(scene, physicsWorld) {
   colShape.calculateLocalInertia( mass, localInertia );
 
   const rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-  const body = new Ammo.btRigidBody( rbInfo );
+  const body = new Ammo.btRigidBody(rbInfo);
+  body.setRestitution(0.8);
 
   physicsWorld.addRigidBody( body, colGroupPlane, colGroupRedBall );
 }
