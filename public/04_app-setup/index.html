@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>General App Setup</title>
+  <title>General Kibo App Setup</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,7 +13,49 @@
     <div id="controls">
       <button type="button" id="controls__settings"><span class="icon-cog"></span></button>
     </div>
-    <div class="settings">
+    <div id="settings" class="dialog">
+      <div class="dialog__layer"></div>
+      <div class="dialog__window">
+        <div class="dialog__header">
+          <h1 class="dialog__header-title">App Settings</h1>
+        </div>
+        <div class="dialog__viewport">
+          <div class="dialog__content">
+            <p>App settings in this panel.</p>
+            <div class="settings__section">
+              <div class="settings__section-left">
+                <div class="settings__section-header">Bluetooth</div>
+                <button type="button" class="btn ble-connect">Connect...</button>
+                <div class="settings__status ble-status">Not connected</div>
+              </div>
+              <div class="settings__section-right">
+                <div class="settings__section-header">MIDI</div>
+                <select class="midiin-select">
+                  <option value="null">No input selected...</option>
+                </select>
+                <div class="settings__status midiin-status"></div>
+              </div>
+            </div>
+            <div class="settings__section">
+              <button type="button" class="btn btn-reset">Reset</button>
+              <span class="settings__btn_description">Clear all data and start fresh.</span>
+            </div>
+          </div>
+        </div>
+        <div class="dialog__controls">
+          <div class="settings__section">
+            <div class="settings__section-left">
+              <div></div>
+            </div>
+            <div class="settings__section-right">
+              <button type="button" class="btn dialog__resolve">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="settings">
       <div class="settings__layer"></div>
       <div class="settings__window panel">  
         <div class="panel__header">
@@ -47,7 +89,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <script src="js/main.js" type="module"></script>
 </body>

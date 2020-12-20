@@ -1,4 +1,17 @@
+@import 'dialog.css';
 @import 'settings.css';
+
+:root {
+  --color-lightest: #fff;
+  --color-lighter: #eee;
+  --color-light: #ccc;
+  --color-midlight: #aaa;
+  --color-mid: #999;
+  --color-middark: #666;
+  --color-dark: #333;
+  --color-darker: #111;
+  --color-darkest: #000;
+}
 
 /************************
  * Fonts and icons
@@ -63,6 +76,38 @@
 }
 body {
   font-family: sans-serif;
+}
+.btn {
+  background-color: var(--color-lightest);
+  border: 1px solid var(--color-darkest);
+  border-radius: 0;
+  color: var(--color-darkest);
+  cursor: pointer;
+  font-size: 16px;
+  justify-content: space-around;
+  outline: none;
+  padding: 8px 16px;
+  -webkit-tap-highlight-color: transparent; 
+  text-align: center;
+}
+.btn:hover {
+  background-color: var(--color-lighter);
+  color: var(--color-dark);
+}
+.toggle__check {
+  position: absolute;
+  margin-left: -9999px;
+  visibility: hidden;
+}
+.toggle__check + .toggle__label > span:before {
+  content: attr(data-off);
+}
+.toggle__check:checked + .toggle__label > span:before {
+  content: attr(data-on);
+}
+.toggle__check:checked + .toggle__label {
+  background-color: var(--color-light);
+  color: var(--color-dark);
 }
 #controls {
 	right: 0;

@@ -20,6 +20,11 @@ function addEventListeners() {
 	bluetoothConnectBtn.addEventListener('click', e => {
 		dispatch(getActions().bluetoothConnect());
 	});
+
+	rootEl.querySelector('.btn-reset').addEventListener('click', e => {
+		localStorage.clear();
+    dispatch(getActions().newProject());
+	});
 }
 
 function handleStateChanges(e) {
@@ -64,9 +69,9 @@ function handleStateChanges(e) {
 }
 
 export function setup() {
-	rootEl = document.querySelector('.settings');
-	layerEl = rootEl.querySelector('.settings__layer');
-	closeBtn = rootEl.querySelector('.settings__close');
+	rootEl = document.querySelector('#settings');
+	layerEl = rootEl.querySelector('.dialog__layer');
+	closeBtn = rootEl.querySelector('.dialog__resolve');
 	midiInputsSelect = rootEl.querySelector('.midiin-select');
 	midiInputStatusEl = rootEl.querySelector('.midiin-status');
 	bluetoothConnectBtn = rootEl.querySelector('.ble-connect');
@@ -88,9 +93,9 @@ function showMIDIAccessible(state) {
 function showSettingsPanel(state) {
 	const { isSettingsVisible } = state;
 	if (isSettingsVisible) {
-		rootEl.classList.add('settings--show');
+		rootEl.dataset.show = true;
 	} else {
-		rootEl.classList.remove('settings--show');
+		rootEl.dataset.show = false;
 	}
 }
 
